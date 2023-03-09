@@ -9,6 +9,7 @@ const App = () => {
 
   const [ output, setOutput ] = useState([])
   const [ input, setInput ] = useState('')
+  const [ randomWord, setRandomWord ] = useState('')
 
   const authenticated = axios.create({
     baseURL: 'https://api.api-ninjas.com/v1/',
@@ -25,7 +26,10 @@ const App = () => {
   const handleSubmit = (e) => {
     e.preventDefault()
     const getData = async () => {
+      randomWord.word && setInput(randomWord.word)
+      console.log('input', input)
       try {
+        randomWord.word && setInput(randomWord.word)
         const { data } = await authenticated.get(`rhyme?word=${input}`) 
         setOutput(data)
       } catch (error) {
@@ -33,22 +37,38 @@ const App = () => {
       } 
     }
     getData()
+  } 
 
+
+  const submitRandom = (e) => {
+    e.preventDefault()
+    const getWord = async () => {
+      try {
+        const { data } = await authenticated.get('randomword') 
+        setRandomWord(data)
+        setInput(randomWord.word)
+        console.log(input)
+      } catch (error) {
+        console.log(error)
+      } 
+    }
+    getWord()
   } 
 
   console.log(output)
-
+  console.log(input)
   
   return (  
     <Container>
       <Col as="form" xs={{ span: 10, offset: 1 }} sm={{ span: 8, offset: 2 }} md={{ span: 6, offset: 3 }} onSubmit={handleSubmit}>
         <Row> 
           <h1>Moms Spaghetti</h1>
-          <input type="text" name="search" placeholder='Search...' value={input} onChange={handleChange} />
+          <input type="text" name="search" placeholder={!randomWord ? 'Search' : randomWord.word} value={!randomWord ? input : randomWord.word } onChange={handleChange} />
           <button className='btn w-100 mb-4'>Submit</button>
+          <button className='btn w-100 mb-4' onClick={submitRandom}>Random word</button>
           { output.length > 0 && 
             <ul>
-              {output.map(word => <li key={word}>{word}</li>)}
+              {output.map((word, i) => <li key={i}>{word}</li>)}
             </ul>  
           }
         </Row>
