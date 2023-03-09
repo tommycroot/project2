@@ -33,11 +33,10 @@ const App = () => {
       } 
     }
     getData()
-  } 
-  
-  console.log(output)
-  console.log(input)
 
+  } 
+
+  console.log(output)
 
   
   return (  
@@ -47,6 +46,11 @@ const App = () => {
           <h1>Moms Spaghetti</h1>
           <input type="text" name="search" placeholder='Search...' value={input} onChange={handleChange} />
           <button className='btn w-100 mb-4'>Submit</button>
+          { output.length > 0 && 
+            <ul>
+              {output.map(word => <li key={word}>{word}</li>)}
+            </ul>  
+          }
         </Row>
       </Col>
     </Container>
