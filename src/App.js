@@ -7,7 +7,7 @@ import Col from 'react-bootstrap/Col'
 
 const App = () => {
 
-  const [ output, setOutput ] = useState('')
+  const [ output, setOutput ] = useState([])
   const [ input, setInput ] = useState('')
 
   const authenticated = axios.create({
@@ -20,25 +20,33 @@ const App = () => {
 
   const handleChange = (e) => {
     setInput(e.target.value)
-    console.log(input)
-  } 
+  }
   
-  useEffect(() => {
+  const handleSubmit = (e) => {
+    e.preventDefault()
     const getData = async () => {
-      const data = await authenticated.get('rhyme?word=' + 'input') 
-       
-      setOutput(data)
-      console.log(output)
+      try {
+        const { data } = await authenticated.get(`rhyme?word=${input}`) 
+        setOutput(data)
+      } catch (error) {
+        console.log(error)
+      } 
     }
     getData()
-  }, [])
+  } 
+  
+  console.log(output)
+  console.log(input)
 
+
+  
   return (  
     <Container>
-      <Col as="form" xs={{ span: 10, offset: 1 }} sm={{ span: 8, offset: 2 }} md={{ span: 6, offset: 3 }}>
+      <Col as="form" xs={{ span: 10, offset: 1 }} sm={{ span: 8, offset: 2 }} md={{ span: 6, offset: 3 }} onSubmit={handleSubmit}>
         <Row> 
           <h1>Moms Spaghetti</h1>
           <input type="text" name="search" placeholder='Search...' value={input} onChange={handleChange} />
+          <button className='btn w-100 mb-4'>Submit</button>
         </Row>
       </Col>
     </Container>
