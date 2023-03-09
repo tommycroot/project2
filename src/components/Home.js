@@ -18,11 +18,13 @@ const Home = () => {
     },
   })
 
-
+  
   const handleChange = (e) => {
     setInput(e.target.value)
   }
   
+  const navigate = useNavigate()
+
   const handleSubmit = (e) => {
     e.preventDefault()
     const getData = async () => {
@@ -31,6 +33,7 @@ const Home = () => {
         randomWord.word && setInput(randomWord.word)
         const { data } = await authenticated.get(`rhyme?word=${input}`) 
         setOutput(data)
+        navigate('/results')
       } catch (error) {
         console.log(error)
       } 
