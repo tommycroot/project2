@@ -1,77 +1,68 @@
 import { useEffect, useState } from 'react'
-import { BrowserRouter, Routes, Route, Link, useNavigate } from 'react-router-dom'
+import { useNavigate,useLocation } from 'react-router-dom'
 import axios from 'axios'
 import Container from 'react-bootstrap/Container'
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
-
 const Home = () => {
-
-  const [ output, setOutput ] = useState([])
-  const [ input, setInput ] = useState('')
-  const [ randomWord, setRandomWord ] = useState('')
-
+  const [output, setOutput] = useState([])
+  const [input, setInput] = useState('')
+  const [randomWord, setRandomWord] = useState('')
+  // const location = useLocation()
+  // useEffect(() => {
+  //   console.log(location)
+  // },[location])
   const authenticated = axios.create({
     baseURL: 'https://api.api-ninjas.com/v1/',
     headers: {
       'X-Api-Key': 'yUK8DHmGKFjWMJddpFBKUg==v0MU65bUvxHEKp3s',
     },
   })
-
-  
   const handleChange = (e) => {
     setInput(e.target.value)
   }
-  
   const navigate = useNavigate()
-
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
-    const getData = async () => {
-      console.log('input', input)
-      try {
-        randomWord.word && setInput(randomWord.word)
-        const { data } = await authenticated.get(`rhyme?word=${input}`) 
-        setOutput(data)
-        navigate('/results')
-      } catch (error) {
-        console.log(error)
-      } 
+    try {
+      // randomWord && setInput(randomWord.word)
+      const { data } = await authenticated.get(`rhyme?word=${input}`)
+      setOutput(data)
+      // navigate('/results')
+    } catch (error) {
+      console.log(error)
     }
-    getData()
-  } 
-
-
-  const submitRandom = (e) => {
+  }
+  // useEffect(() => {
+  //   setInput(randomWord)
+  // }, [randomWord])
+  const submitRandom = async (e) => {
     e.preventDefault()
-    const getWord = async () => {
-      try {
-        const { data } = await authenticated.get('randomword') 
-        setRandomWord(data)
-        setInput(randomWord.word)
-        console.log(input)
-      } catch (error) {
-        console.log(error)
-      } 
+    try {
+      const { data } = await authenticated.get('randomword')
+      setInput(data.word)
+      console.log(data)
+      // setInput(randomWord.word)
+    } catch (error) {
+      console.log(error)
     }
-    getWord()
-  } 
-
-  console.log(output)
-  console.log(input)
+  }
+  console.log('output', output)
+  console.log('input', input)
+  console.log('randomword', randomWord)
   return (
     <Container>
       <Col as="form" xs={{ span: 10, offset: 1 }} sm={{ span: 8, offset: 2 }} md={{ span: 6, offset: 3 }} onSubmit={handleSubmit}>
-        <Row> 
+        <Row>
           <h1>{'Mom\'s Spaghetti'}</h1>
-          <input type="text" name="search" placeholder={!randomWord ? 'Search' : randomWord.word} value={!randomWord ? input : randomWord.word } onChange={handleChange} />
+          <input type="text" name="search" placeholder='Search' value={input} onChange={handleChange} />
           <button className='btn w-100 mb-4'>Submit</button>
           <Row>
             <button id="randomBtn" className='btn w-100 mb-4' onClick={submitRandom}>Random word</button>
-            { output.length > 0 && 
-            <ul>
-              {output.map((word, i) => <li key={i}>{word}</li>)}
-            </ul>  
+            {output.length > 0 &&
+              <ul>
+                {output.map((word, i) => <li key={i}>{word}</li>)}
+              </ul>
             }
           </Row>
         </Row>
@@ -79,5 +70,4 @@ const Home = () => {
     </Container>
   )
 }
-
 export default Home
