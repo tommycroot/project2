@@ -9,7 +9,7 @@ const App = () => {
   const authenticated = axios.create({
     baseURL: 'https://api.api-ninjas.com/v1/',
     headers: {
-      'X-Api-Key': 'yUK8DHmGKFjWMJddpFBKUg==v0MU65bUvxHEKp3s',
+      'X-Api-Key': process.env.REACT_APP_API_KEY,
     },
   })
   return (
