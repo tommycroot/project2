@@ -6,7 +6,7 @@ This was a coding challenge in which we worked in pairs to build a React App whi
 
 ## Deployment Link
 
-The game is deployed [here](https://momsspaghetti.netlify.app/)
+The app is deployed [here](https://momsspaghetti.netlify.app/)
 
 ![2023-05-05 (13)](https://user-images.githubusercontent.com/80596226/236493381-12d2fd69-9e21-4739-b807-c87e41fb4616.png)
 
